@@ -1,0 +1,11 @@
+/home/user/Desktop/claude/espotz-solana/target/debug/deps/libsha3-31974853c22545be.rmeta: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/paddings.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/macros.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/reader.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/state.rs
+
+/home/user/Desktop/claude/espotz-solana/target/debug/deps/libsha3-31974853c22545be.rlib: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/paddings.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/macros.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/reader.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/state.rs
+
+/home/user/Desktop/claude/espotz-solana/target/debug/deps/sha3-31974853c22545be.d: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/paddings.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/macros.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/reader.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/state.rs
+
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/lib.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/paddings.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/macros.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/reader.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/sha3-0.9.1/src/state.rs:

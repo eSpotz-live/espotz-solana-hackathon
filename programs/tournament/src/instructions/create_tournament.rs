@@ -1,5 +1,4 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{Mint, Token, TokenAccount};
 
 use crate::state::*;
 use crate::errors::*;
@@ -25,26 +24,10 @@ pub struct CreateTournament<'info> {
     )]
     pub vault_authority: Account<'info, VaultAuthority>,
 
-    /// Vault token account to hold USDC
-    #[account(
-        init,
-        payer = admin,
-        token::mint = usdc_mint,
-        token::authority = vault_authority,
-        seeds = [b"vault-token", tournament.key().as_ref()],
-        bump
-    )]
-    pub vault_token_account: Account<'info, TokenAccount>,
-
-    /// USDC mint (devnet or mainnet)
-    pub usdc_mint: Account<'info, Mint>,
-
     #[account(mut)]
     pub admin: Signer<'info>,
 
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, Token>,
-    pub rent: Sysvar<'info, Rent>,
 }
 
 pub fn handler(

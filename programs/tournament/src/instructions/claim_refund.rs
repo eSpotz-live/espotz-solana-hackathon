@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Token, TokenAccount, Transfer, CloseAccount};
+use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
 use crate::state::*;
 use crate::errors::*;

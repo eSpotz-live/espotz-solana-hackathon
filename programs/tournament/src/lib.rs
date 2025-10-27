@@ -48,8 +48,8 @@ pub mod tournament {
     }
 
     /// Distribute prizes to winners (admin only)
-    pub fn distribute_prizes(
-        ctx: Context<DistributePrizes>,
+    pub fn distribute_prizes<'info>(
+        ctx: Context<'_, '_, '_, 'info, DistributePrizes<'info>>,
         winners: Vec<Pubkey>,
         amounts: Vec<u64>,
     ) -> Result<()> {

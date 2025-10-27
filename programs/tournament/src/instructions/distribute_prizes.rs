@@ -32,8 +32,8 @@ pub struct DistributePrizes<'info> {
     // Winner token accounts passed as remaining_accounts
 }
 
-pub fn handler(
-    ctx: Context<DistributePrizes>,
+pub fn handler<'info>(
+    ctx: Context<'_, '_, '_, 'info, DistributePrizes<'info>>,
     winners: Vec<Pubkey>,
     amounts: Vec<u64>,
 ) -> Result<()> {
