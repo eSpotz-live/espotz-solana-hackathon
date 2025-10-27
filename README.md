@@ -272,16 +272,6 @@ cd app
 npm run test
 ```
 
-## Security
-
-⚠️ **IMPORTANT:** Before mainnet deployment:
-
-1. ✅ Complete security audit ($5-15K)
-2. ✅ All tests passing
-3. ✅ Edge cases tested
-4. ✅ Set upgrade authority to multisig
-5. ✅ Document all instructions
-6. ✅ Emergency pause mechanism
 
 ## Cost Estimates
 
