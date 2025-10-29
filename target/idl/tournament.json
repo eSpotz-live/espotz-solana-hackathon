@@ -1,47 +1,273 @@
 {
-  "version": "0.1.0",
-  "name": "tournament",
-  "docs": [
-    "ESPOTZ - Decentralized Esports Tournament Platform",
-    "Built on Solana with Anchor Framework",
-    "Manages tournament lifecycle, player registration, result submission, and prize distribution"
-  ],
+  "address": "BCp2s2ogskLUShw7Xvvkvbz2YWp9m94RPWJQCyXptyuv",
+  "metadata": {
+    "name": "tournament",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Espotz Tournament Platform Smart Contract"
+  },
   "instructions": [
     {
-      "name": "createTournament",
+      "name": "cancel_tournament",
       "docs": [
-        "Create a new tournament with custom parameters",
-        "Only callable by the tournament operator (admin)"
+        "Cancel tournament (admin only)"
+      ],
+      "discriminator": [
+        249,
+        227,
+        133,
+        5,
+        9,
+        142,
+        29,
+        122
       ],
       "accounts": [
         {
           "name": "tournament",
-          "isMut": true,
-          "isSigner": false,
-          "docs": [
-            "Tournament account to be initialized"
-          ]
-        },
-        {
-          "name": "vaultAuthority",
-          "isMut": true,
-          "isSigner": false,
-          "docs": [
-            "PDA that will control the prize vault"
-          ]
+          "writable": true
         },
         {
           "name": "admin",
-          "isMut": true,
-          "isSigner": true,
-          "docs": [
-            "Tournament operator/admin who pays for account creation"
-          ]
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_refund",
+      "docs": [
+        "Claim refund for cancelled tournament"
+      ],
+      "discriminator": [
+        15,
+        16,
+        30,
+        161,
+        255,
+        228,
+        97,
+        60
+      ],
+      "accounts": [
+        {
+          "name": "tournament"
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "player_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114,
+                  45,
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "player",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_tournament",
+      "docs": [
+        "Create a new tournament"
+      ],
+      "discriminator": [
+        158,
+        137,
+        233,
+        231,
+        73,
+        132,
+        191,
+        68
+      ],
+      "accounts": [
+        {
+          "name": "tournament",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_authority",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -50,124 +276,124 @@
           "type": "u32"
         },
         {
-          "name": "gameType",
+          "name": "game_type",
           "type": {
-            "defined": "GameType"
+            "defined": {
+              "name": "GameType"
+            }
           }
         },
         {
-          "name": "entryFee",
+          "name": "entry_fee",
           "type": "u64"
         },
         {
-          "name": "maxPlayers",
+          "name": "max_players",
           "type": "u16"
         },
         {
-          "name": "startTime",
+          "name": "start_time",
           "type": "i64"
         },
         {
-          "name": "endTime",
+          "name": "end_time",
           "type": "i64"
         }
       ]
     },
     {
-      "name": "registerPlayer",
+      "name": "distribute_prizes",
       "docs": [
-        "Register a player for a tournament by paying the entry fee in USDC"
+        "Distribute prizes to winners (admin only)"
+      ],
+      "discriminator": [
+        154,
+        99,
+        201,
+        93,
+        82,
+        104,
+        73,
+        232
       ],
       "accounts": [
         {
           "name": "tournament",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "playerEntry",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "player",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "submitResults",
-      "docs": [
-        "Submit tournament results - only callable by tournament admin",
-        "Records winners and transitions tournament to Ended status"
-      ],
-      "accounts": [
-        {
-          "name": "tournament",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": false,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "winners",
-          "type": {
-            "vec": "publicKey"
+          "name": "vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
           }
-        }
-      ]
-    },
-    {
-      "name": "distributePrizes",
-      "docs": [
-        "Distribute prizes to winners from the escrow vault",
-        "Only callable by tournament admin",
-        "Supports multiple winners with flexible prize splits"
-      ],
-      "accounts": [
+        },
         {
-          "name": "tournament",
-          "isMut": true,
-          "isSigner": false
+          "name": "vault_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
         },
         {
           "name": "admin",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         },
         {
-          "name": "vaultAuthority",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "vaultTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
           "name": "winners",
           "type": {
-            "vec": "publicKey"
+            "vec": "pubkey"
           }
         },
         {
@@ -179,299 +405,394 @@
       ]
     },
     {
-      "name": "cancelTournament",
+      "name": "register_player",
       "docs": [
-        "Cancel a tournament - only callable by admin",
-        "Enables refund mechanism for registered players"
+        "Register a player for a tournament"
+      ],
+      "discriminator": [
+        242,
+        146,
+        194,
+        234,
+        234,
+        145,
+        228,
+        42
       ],
       "accounts": [
         {
           "name": "tournament",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
-          "name": "admin",
-          "isMut": false,
-          "isSigner": true
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "claimRefund",
-      "docs": [
-        "Claim entry fee refund for cancelled tournament",
-        "Only works if tournament is in Cancelled status"
-      ],
-      "accounts": [
-        {
-          "name": "tournament",
-          "isMut": true,
-          "isSigner": false
+          "name": "player_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114,
+                  45,
+                  101,
+                  110,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              },
+              {
+                "kind": "account",
+                "path": "player"
+              }
+            ]
+          }
         },
         {
-          "name": "playerEntry",
-          "isMut": true,
-          "isSigner": false
+          "name": "vault_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
         },
         {
           "name": "player",
-          "isMut": false,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "vaultAuthority",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "vaultTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": []
     },
     {
-      "name": "startTournament",
+      "name": "start_tournament",
       "docs": [
-        "Start tournament - transitions from Registration to Active status",
-        "Only callable by tournament admin after start_time"
+        "Start tournament (changes status from Registration to Active)"
+      ],
+      "discriminator": [
+        164,
+        168,
+        208,
+        157,
+        43,
+        10,
+        220,
+        241
       ],
       "accounts": [
         {
           "name": "tournament",
-          "isMut": true,
-          "isSigner": false
+          "writable": true
         },
         {
           "name": "admin",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         }
       ],
       "args": []
+    },
+    {
+      "name": "submit_results",
+      "docs": [
+        "Submit tournament results (admin only)"
+      ],
+      "discriminator": [
+        22,
+        16,
+        250,
+        159,
+        91,
+        235,
+        19,
+        57
+      ],
+      "accounts": [
+        {
+          "name": "tournament",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "winners",
+          "type": {
+            "vec": "pubkey"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
     {
-      "name": "Tournament",
-      "docs": [
-        "Main tournament state account",
-        "Stores tournament metadata and status"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "id",
-            "docs": [
-              "Unique tournament ID"
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "admin",
-            "docs": [
-              "Tournament operator/admin wallet"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "status",
-            "docs": [
-              "Current tournament status"
-            ],
-            "type": {
-              "defined": "TournamentStatus"
-            }
-          },
-          {
-            "name": "gameType",
-            "docs": [
-              "Game type (Fortnite, PUBG Mobile, etc.)"
-            ],
-            "type": {
-              "defined": "GameType"
-            }
-          },
-          {
-            "name": "entryFee",
-            "docs": [
-              "Entry fee in USDC (lamports)"
-            ],
-            "type": "u64"
-          },
-          {
-            "name": "prizePool",
-            "docs": [
-              "Total prize pool in USDC"
-            ],
-            "type": "u64"
-          },
-          {
-            "name": "maxPlayers",
-            "docs": [
-              "Maximum number of players"
-            ],
-            "type": "u16"
-          },
-          {
-            "name": "currentPlayers",
-            "docs": [
-              "Current registered players"
-            ],
-            "type": "u16"
-          },
-          {
-            "name": "startTime",
-            "docs": [
-              "Tournament start time (Unix timestamp)"
-            ],
-            "type": "i64"
-          },
-          {
-            "name": "endTime",
-            "docs": [
-              "Tournament end time (Unix timestamp)"
-            ],
-            "type": "i64"
-          },
-          {
-            "name": "bump",
-            "docs": [
-              "PDA bump seed"
-            ],
-            "type": "u8"
-          }
-        ]
-      }
+      "name": "PlayerEntry",
+      "discriminator": [
+        158,
+        6,
+        39,
+        104,
+        234,
+        4,
+        153,
+        255
+      ]
     },
     {
-      "name": "PlayerEntry",
-      "docs": [
-        "Individual player registration record"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "tournament",
-            "docs": [
-              "Tournament account key"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "player",
-            "docs": [
-              "Player wallet address"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "entryTime",
-            "docs": [
-              "Registration timestamp"
-            ],
-            "type": "i64"
-          },
-          {
-            "name": "refunded",
-            "docs": [
-              "Refund status"
-            ],
-            "type": "bool"
-          },
-          {
-            "name": "bump",
-            "docs": [
-              "PDA bump seed"
-            ],
-            "type": "u8"
-          }
-        ]
-      }
+      "name": "Tournament",
+      "discriminator": [
+        175,
+        139,
+        119,
+        242,
+        115,
+        194,
+        57,
+        92
+      ]
     },
     {
       "name": "VaultAuthority",
-      "docs": [
-        "PDA that controls the prize vault and can sign token transfers"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "tournament",
-            "docs": [
-              "Associated tournament"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "bump",
-            "docs": [
-              "PDA bump seed"
-            ],
-            "type": "u8"
-          }
-        ]
-      }
+      "discriminator": [
+        132,
+        34,
+        187,
+        202,
+        202,
+        195,
+        211,
+        53
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "PlayerRegistered",
+      "discriminator": [
+        175,
+        78,
+        252,
+        170,
+        75,
+        230,
+        36,
+        251
+      ]
+    },
+    {
+      "name": "PrizesDistributed",
+      "discriminator": [
+        109,
+        23,
+        248,
+        16,
+        66,
+        223,
+        21,
+        83
+      ]
+    },
+    {
+      "name": "RefundClaimed",
+      "discriminator": [
+        136,
+        64,
+        242,
+        99,
+        4,
+        244,
+        208,
+        130
+      ]
+    },
+    {
+      "name": "ResultsSubmitted",
+      "discriminator": [
+        115,
+        110,
+        15,
+        144,
+        27,
+        92,
+        181,
+        41
+      ]
+    },
+    {
+      "name": "TournamentCancelled",
+      "discriminator": [
+        118,
+        92,
+        146,
+        131,
+        165,
+        72,
+        81,
+        120
+      ]
+    },
+    {
+      "name": "TournamentCreated",
+      "discriminator": [
+        102,
+        32,
+        240,
+        45,
+        52,
+        64,
+        97,
+        0
+      ]
+    },
+    {
+      "name": "TournamentStarted",
+      "discriminator": [
+        200,
+        157,
+        174,
+        194,
+        174,
+        219,
+        107,
+        44
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "TournamentAlreadyStarted",
+      "msg": "Tournament has already started"
+    },
+    {
+      "code": 6001,
+      "name": "TournamentFull",
+      "msg": "Tournament is full"
+    },
+    {
+      "code": 6002,
+      "name": "RegistrationClosed",
+      "msg": "Registration period has ended"
+    },
+    {
+      "code": 6003,
+      "name": "TournamentNotStarted",
+      "msg": "Tournament has not started yet"
+    },
+    {
+      "code": 6004,
+      "name": "TournamentNotEnded",
+      "msg": "Tournament has not ended yet"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidTournamentStatus",
+      "msg": "Tournament is not in the correct status for this operation"
+    },
+    {
+      "code": 6006,
+      "name": "Unauthorized",
+      "msg": "Unauthorized: Only admin can perform this action"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidEntryFee",
+      "msg": "Invalid entry fee amount"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidParameters",
+      "msg": "Invalid tournament parameters"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidTimes",
+      "msg": "Start time must be before end time"
+    },
+    {
+      "code": 6010,
+      "name": "InsufficientPrizePool",
+      "msg": "Prize distribution exceeds prize pool"
+    },
+    {
+      "code": 6011,
+      "name": "Overflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6012,
+      "name": "Underflow",
+      "msg": "Arithmetic underflow"
+    },
+    {
+      "code": 6013,
+      "name": "MismatchedArrays",
+      "msg": "Winner list does not match amount list"
+    },
+    {
+      "code": 6014,
+      "name": "TournamentNotCancelled",
+      "msg": "Tournament is not cancelled"
+    },
+    {
+      "code": 6015,
+      "name": "AlreadyRefunded",
+      "msg": "Player already refunded"
+    },
+    {
+      "code": 6016,
+      "name": "CannotCancelAfterEnd",
+      "msg": "Tournament cannot be cancelled after it has ended"
+    },
+    {
+      "code": 6017,
+      "name": "InvalidMint",
+      "msg": "Invalid USDC mint address"
+    },
+    {
+      "code": 6018,
+      "name": "PlayerNotRegistered",
+      "msg": "Player is not registered for this tournament"
     }
   ],
   "types": [
     {
-      "name": "TournamentStatus",
-      "docs": [
-        "Tournament lifecycle states"
-      ],
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Registration",
-            "docs": [
-              "Accepting player registrations"
-            ]
-          },
-          {
-            "name": "Active",
-            "docs": [
-              "Tournament is in progress"
-            ]
-          },
-          {
-            "name": "Ended",
-            "docs": [
-              "Tournament completed, awaiting prize distribution"
-            ]
-          },
-          {
-            "name": "Completed",
-            "docs": [
-              "Prizes distributed"
-            ]
-          },
-          {
-            "name": "Cancelled",
-            "docs": [
-              "Tournament cancelled, refunds enabled"
-            ]
-          }
-        ]
-      }
-    },
-    {
       "name": "GameType",
-      "docs": [
-        "Supported esports game types"
-      ],
       "type": {
         "kind": "enum",
         "variants": [
@@ -498,217 +819,361 @@
           }
         ]
       }
-    }
-  ],
-  "events": [
+    },
     {
-      "name": "TournamentCreated",
-      "fields": [
-        {
-          "name": "tournament",
-          "type": "publicKey"
-        },
-        {
-          "name": "admin",
-          "type": "publicKey"
-        },
-        {
-          "name": "id",
-          "type": "u32"
-        },
-        {
-          "name": "gameType",
-          "type": {
-            "defined": "GameType"
+      "name": "PlayerEntry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "docs": [
+              "Associated tournament"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "player",
+            "docs": [
+              "Player wallet address"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "entry_time",
+            "docs": [
+              "Registration timestamp"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "refunded",
+            "docs": [
+              "Whether player has been refunded"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
           }
-        },
-        {
-          "name": "entryFee",
-          "type": "u64"
-        },
-        {
-          "name": "maxPlayers",
-          "type": "u16"
-        },
-        {
-          "name": "startTime",
-          "type": "i64"
-        },
-        {
-          "name": "endTime",
-          "type": "i64"
-        }
-      ]
+        ]
+      }
     },
     {
       "name": "PlayerRegistered",
-      "fields": [
-        {
-          "name": "tournament",
-          "type": "publicKey"
-        },
-        {
-          "name": "player",
-          "type": "publicKey"
-        },
-        {
-          "name": "entryTime",
-          "type": "i64"
-        }
-      ]
-    },
-    {
-      "name": "ResultsSubmitted",
-      "fields": [
-        {
-          "name": "tournament",
-          "type": "publicKey"
-        },
-        {
-          "name": "winners",
-          "type": {
-            "vec": "publicKey"
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "entry_time",
+            "type": "i64"
+          },
+          {
+            "name": "current_players",
+            "type": "u16"
           }
-        },
-        {
-          "name": "timestamp",
-          "type": "i64"
-        }
-      ]
+        ]
+      }
     },
     {
       "name": "PrizesDistributed",
-      "fields": [
-        {
-          "name": "tournament",
-          "type": "publicKey"
-        },
-        {
-          "name": "winners",
-          "type": {
-            "vec": "publicKey"
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "winners",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "amounts",
+            "type": {
+              "vec": "u64"
+            }
+          },
+          {
+            "name": "total",
+            "type": "u64"
           }
-        },
-        {
-          "name": "amounts",
-          "type": {
-            "vec": "u64"
-          }
-        },
-        {
-          "name": "timestamp",
-          "type": "i64"
-        }
-      ]
-    },
-    {
-      "name": "TournamentCancelled",
-      "fields": [
-        {
-          "name": "tournament",
-          "type": "publicKey"
-        },
-        {
-          "name": "timestamp",
-          "type": "i64"
-        }
-      ]
+        ]
+      }
     },
     {
       "name": "RefundClaimed",
-      "fields": [
-        {
-          "name": "tournament",
-          "type": "publicKey"
-        },
-        {
-          "name": "player",
-          "type": "publicKey"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "timestamp",
-          "type": "i64"
-        }
-      ]
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "player",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ResultsSubmitted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "winners",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Tournament",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "docs": [
+              "Unique tournament ID"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "admin",
+            "docs": [
+              "Tournament operator/admin"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "status",
+            "docs": [
+              "Current tournament status"
+            ],
+            "type": {
+              "defined": {
+                "name": "TournamentStatus"
+              }
+            }
+          },
+          {
+            "name": "game_type",
+            "docs": [
+              "Game type (Fortnite, PUBG Mobile, etc.)"
+            ],
+            "type": {
+              "defined": {
+                "name": "GameType"
+              }
+            }
+          },
+          {
+            "name": "entry_fee",
+            "docs": [
+              "Entry fee in USDC (lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "prize_pool",
+            "docs": [
+              "Total prize pool in USDC"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "max_players",
+            "docs": [
+              "Maximum number of players"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "current_players",
+            "docs": [
+              "Current registered players"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "start_time",
+            "docs": [
+              "Tournament start time (Unix timestamp)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "end_time",
+            "docs": [
+              "Tournament end time (Unix timestamp)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TournamentCancelled",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TournamentCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "game_type",
+            "type": {
+              "defined": {
+                "name": "GameType"
+              }
+            }
+          },
+          {
+            "name": "entry_fee",
+            "type": "u64"
+          },
+          {
+            "name": "max_players",
+            "type": "u16"
+          },
+          {
+            "name": "start_time",
+            "type": "i64"
+          },
+          {
+            "name": "end_time",
+            "type": "i64"
+          }
+        ]
+      }
     },
     {
       "name": "TournamentStarted",
-      "fields": [
-        {
-          "name": "tournament",
-          "type": "publicKey"
-        },
-        {
-          "name": "timestamp",
-          "type": "i64"
-        }
-      ]
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "InvalidParameters",
-      "msg": "Invalid tournament parameters"
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
     },
     {
-      "code": 6001,
-      "name": "InvalidEntryFee",
-      "msg": "Entry fee must be greater than zero"
+      "name": "TournamentStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Registration"
+          },
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Ended"
+          },
+          {
+            "name": "Completed"
+          },
+          {
+            "name": "Cancelled"
+          }
+        ]
+      }
     },
     {
-      "code": 6002,
-      "name": "InvalidTimes",
-      "msg": "Tournament start time must be after now and before end time"
-    },
-    {
-      "code": 6003,
-      "name": "TournamentFull",
-      "msg": "Tournament has reached maximum player capacity"
-    },
-    {
-      "code": 6004,
-      "name": "InvalidTournamentStatus",
-      "msg": "Invalid tournament status for this operation"
-    },
-    {
-      "code": 6005,
-      "name": "Unauthorized",
-      "msg": "Unauthorized access to tournament"
-    },
-    {
-      "code": 6006,
-      "name": "PlayerNotRegistered",
-      "msg": "Player is not registered for this tournament"
-    },
-    {
-      "code": 6007,
-      "name": "InvalidWinnerCount",
-      "msg": "Winner count does not match amount count"
-    },
-    {
-      "code": 6008,
-      "name": "PrizePoolExceeded",
-      "msg": "Prize distribution exceeds available pool"
-    },
-    {
-      "code": 6009,
-      "name": "TournamentNotCancelled",
-      "msg": "Tournament is not in cancelled status"
-    },
-    {
-      "code": 6010,
-      "name": "AlreadyRefunded",
-      "msg": "Player has already claimed refund"
-    },
-    {
-      "code": 6011,
-      "name": "TournamentNotStarted",
-      "msg": "Tournament has not started yet"
+      "name": "VaultAuthority",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "docs": [
+              "Associated tournament"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
     }
   ]
 }

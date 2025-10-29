@@ -1,0 +1,104 @@
+================================================================================
+ESPOTZ TOURNAMENT - RAW WEB3.JS CLIENT (NO ANCHOR)
+================================================================================
+
+Tournament Operator: AZgsUBQpMa9DHuX5jpQKDNxNJ7BHgJHpkTaeAqr59cDB
+
+Players:
+  Player 1: 877QLQPaieHtk929Lv2Xs4yyJijmgkGPoauEspVGS1Mk
+  Player 2: 2Hw4LYxQgiPNVJRNUp4GJVGjBqPXDeaZUrqtJPY196Uk
+  Player 3: 8vdYLxfbZJNapnNvaWCUuJfnHDNjXHnV6R9D77zn5pRF
+  Player 4: 2EKVqucgjpy8uJT1B4UndQvB6AsQJDAeU1aLLmLErNBM
+  Player 5: 8KAUK22mYMsLRmZCBhokJiwFunMrLjnv3paix9gg1pnt
+
+Operator Balance: 0.7224 SOL
+
+================================================================================
+STEP 1: Fund Player Wallets (0.003 SOL each)
+================================================================================
+✓ Funded Player 1
+  Hash: 4LVAgiJx5A4sqHhyNNcZVf8wMudo2bXoxgzwVcThcjrC4yKkr6VZxbrwLiA1CUm5XHDtKuifShDAduMuXnXJeb2s
+  Explorer: https://explorer.solana.com/tx/4LVAgiJx5A4sqHhyNNcZVf8wMudo2bXoxgzwVcThcjrC4yKkr6VZxbrwLiA1CUm5XHDtKuifShDAduMuXnXJeb2s?cluster=devnet
+✓ Funded Player 2
+  Hash: 5VvUJbai3H8B4XursKKrDKHxhdwELK6LD4huS5SQNr5xEAFcPPCsZFD78aBr6DK1UNZYdFeTgSWRebeVri9oMC4F
+  Explorer: https://explorer.solana.com/tx/5VvUJbai3H8B4XursKKrDKHxhdwELK6LD4huS5SQNr5xEAFcPPCsZFD78aBr6DK1UNZYdFeTgSWRebeVri9oMC4F?cluster=devnet
+✓ Funded Player 3
+  Hash: 5RFtfXpvMXBNDLd1at3twEfr4xAvkKFiuN52e3e35K9ydbXi7AwsZQDyX8As6WsV8VdE4vntGU9f7iuauLD8DCuY
+  Explorer: https://explorer.solana.com/tx/5RFtfXpvMXBNDLd1at3twEfr4xAvkKFiuN52e3e35K9ydbXi7AwsZQDyX8As6WsV8VdE4vntGU9f7iuauLD8DCuY?cluster=devnet
+✓ Funded Player 4
+  Hash: CwpT5JbyTdQqK1Szu5BoQiX8YVfFj48rvgJZHyushDtpyZyMs6zjFf4coCTzCq5PDTyFghUswiYKK9jKYspC456
+  Explorer: https://explorer.solana.com/tx/CwpT5JbyTdQqK1Szu5BoQiX8YVfFj48rvgJZHyushDtpyZyMs6zjFf4coCTzCq5PDTyFghUswiYKK9jKYspC456?cluster=devnet
+✓ Funded Player 5
+  Hash: 4DzVrWmEwZNfDfLq3Ttpr2fr1WrKcvzPAguAEZQKCHTJ6tSmg2HJxVh6UK1nQN4wqdzrsp5LtF4tZnz3cWu8VpiL
+  Explorer: https://explorer.solana.com/tx/4DzVrWmEwZNfDfLq3Ttpr2fr1WrKcvzPAguAEZQKCHTJ6tSmg2HJxVh6UK1nQN4wqdzrsp5LtF4tZnz3cWu8VpiL?cluster=devnet
+
+================================================================================
+STEP 2: Create Tournament (0.0003 SOL entry fee, 5 max players)
+================================================================================
+Tournament ID: 793493
+Tournament PDA: Dz8JrjcdGpW6ZQEJhYqJ5vV8B7pfqeEpY4pWEEunMDgk
+Vault Authority: 3deuw6gHwS43ZNA3ymesmnrQLkx7VJpgYs82foVBYhi1
+Vault Account: Hk2gKTm74YJySKSVerP3Ma1p6zs1L81xe98YrR8eRdrQ
+Instruction data: 39 bytes
+
+✓ Tournament Created!
+✓ Hash: 2KFVhT3LQLKggcyWDriwbiwUsMxqf9ENaQwA8cGgoTs3BzGjWdUuBN73GLMM8izwisLs4NFPmZkzgyU2Vn8m6UK5
+✓ Explorer: https://explorer.solana.com/tx/2KFVhT3LQLKggcyWDriwbiwUsMxqf9ENaQwA8cGgoTs3BzGjWdUuBN73GLMM8izwisLs4NFPmZkzgyU2Vn8m6UK5?cluster=devnet
+
+================================================================================
+STEP 3: Register 5 Players (0.0003 SOL each)
+================================================================================
+
+Registering Player 1...
+✓ Player 1 Registered!
+  Hash: 2LcK1SkqiSibYNJ2rgjJFzg1QGzcQ9j9PkPJU9uHZFXfVRQR5dJf9fVwxPUnYTTRL9LZdvJYDgmPH2wEmJMcy49S
+  Explorer: https://explorer.solana.com/tx/2LcK1SkqiSibYNJ2rgjJFzg1QGzcQ9j9PkPJU9uHZFXfVRQR5dJf9fVwxPUnYTTRL9LZdvJYDgmPH2wEmJMcy49S?cluster=devnet
+
+Registering Player 2...
+✓ Player 2 Registered!
+  Hash: 2MNENPMcgaBeSz3NfmGDUpTkRNHqnYeUjiV9ipN1RaAdiEcSg3j4dWXJez7rEbwB3WwV3Ut2JcqApSWQMvjqkTvj
+  Explorer: https://explorer.solana.com/tx/2MNENPMcgaBeSz3NfmGDUpTkRNHqnYeUjiV9ipN1RaAdiEcSg3j4dWXJez7rEbwB3WwV3Ut2JcqApSWQMvjqkTvj?cluster=devnet
+
+Registering Player 3...
+✓ Player 3 Registered!
+  Hash: 2Y5yAguMa17caAbo8BEfqwjJ56tXpLn17RgX99rV11akbXwLFTuemo1QhsWenkyZDjrtPsgh76uSiiw6L1nCiknM
+  Explorer: https://explorer.solana.com/tx/2Y5yAguMa17caAbo8BEfqwjJ56tXpLn17RgX99rV11akbXwLFTuemo1QhsWenkyZDjrtPsgh76uSiiw6L1nCiknM?cluster=devnet
+
+Registering Player 4...
+✓ Player 4 Registered!
+  Hash: 2xc2bTvHB2Fw713UfmCXcMvXnCcAdKcYXXrZGWr5xpNuCroTAhYWQEbkkBBhV4XWSgDEceAWP6VBzn5XGU8gmSCK
+  Explorer: https://explorer.solana.com/tx/2xc2bTvHB2Fw713UfmCXcMvXnCcAdKcYXXrZGWr5xpNuCroTAhYWQEbkkBBhV4XWSgDEceAWP6VBzn5XGU8gmSCK?cluster=devnet
+
+Registering Player 5...
+✓ Player 5 Registered!
+  Hash: 5cepjHQ8PincfTD57hXMdgXzmi8hh34Vqd1Xq1u22cjXTiR3XQC3NuQygrhuU8EZop7TPzhXUQiDuGNpPkCtLrLD
+  Explorer: https://explorer.solana.com/tx/5cepjHQ8PincfTD57hXMdgXzmi8hh34Vqd1Xq1u22cjXTiR3XQC3NuQygrhuU8EZop7TPzhXUQiDuGNpPkCtLrLD?cluster=devnet
+
+⏳ Waiting 70 seconds for tournament start time...
+
+================================================================================
+STEP 4: Start Tournament
+================================================================================
+
+✓ Tournament Started!
+✓ Hash: 4w17vGWYegNvny8nzSwE8G8FAxvo8MmetCMr72CmhXW2awqEUjXqm5LfK4Xm2cQNVfjJ1hsdn5zi2W33HjLf2vCm
+✓ Explorer: https://explorer.solana.com/tx/4w17vGWYegNvny8nzSwE8G8FAxvo8MmetCMr72CmhXW2awqEUjXqm5LfK4Xm2cQNVfjJ1hsdn5zi2W33HjLf2vCm?cluster=devnet
+
+⏳ Waiting 130 seconds for tournament to end...
+
+================================================================================
+STEP 5: Submit Results (Player 1 Wins)
+================================================================================
+ws error: Unexpected server response: 503
+❌ Submit results failed: Signature 41Y6SvhxVRp3E9NLgh4j9JUd8R84Y1U71wJGtG2hfy6xinJRdvfyooggvyMHM4b5WrSkGKP2ftJE3t1WB9pS1Ksz has expired: block height exceeded.
+
+❌ TEST FAILED:
+TransactionExpiredBlockheightExceededError: Signature 41Y6SvhxVRp3E9NLgh4j9JUd8R84Y1U71wJGtG2hfy6xinJRdvfyooggvyMHM4b5WrSkGKP2ftJE3t1WB9pS1Ksz has expired: block height exceeded.
+    at Connection.confirmTransactionUsingBlockHeightExceedanceStrategy (/home/user/Desktop/claude/espotz-solana/node_modules/@solana/web3.js/lib/index.cjs.js:6700:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Connection.confirmTransaction (/home/user/Desktop/claude/espotz-solana/node_modules/@solana/web3.js/lib/index.cjs.js:6528:14)
+    at async sendAndConfirmTransaction (/home/user/Desktop/claude/espotz-solana/node_modules/@solana/web3.js/lib/index.cjs.js:2276:15)
+    at async submitResults (/home/user/Desktop/claude/espotz-solana/test-raw-web3.js:305:19)
+    at async main (/home/user/Desktop/claude/espotz-solana/test-raw-web3.js:430:5) {
+  signature: '41Y6SvhxVRp3E9NLgh4j9JUd8R84Y1U71wJGtG2hfy6xinJRdvfyooggvyMHM4b5WrSkGKP2ftJE3t1WB9pS1Ksz'
+}

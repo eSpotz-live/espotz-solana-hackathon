@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS Variables */
+:root {
+  --color-primary: 59 130 246;
+  --color-primary-foreground: 255 255 255;
+  --color-secondary: 148 163 184;
+  --color-secondary-foreground: 30 41 59;
+  --color-success: 34 197 94;
+  --color-success-foreground: 255 255 255;
+  --color-warning: 234 179 8;
+  --color-warning-foreground: 0 0 0;
+  --color-error: 239 68 68;
+  --color-error-foreground: 255 255 255;
+  --color-muted: 241 245 249;
+  --color-muted-foreground: 113 113 122;
+  --color-accent: 210 210 210;
+  --color-accent-foreground: 0 0 0;
+  --color-border: 214 219 220;
+  --color-input: 31 41 55;
+  --color-ring: 216 180 254;
+  --color-background: 15 23 42;
+  --color-foreground: 233 233 234;
+  --radius: 0.5rem;
+}
+
+/* Base styles */
+* {
+  border-color: hsl(var(--color-border));
+}
+
+body {
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+}
+
+/* Custom component styles */
+.btn {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.btn-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+}
+
+.btn-outline {
+  @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground;
+}
+
+.btn-danger {
+  @apply bg-error text-error-foreground hover:bg-error/90;
+}
+
+.btn-lg {
+  @apply h-12 px-8 text-base;
+}
+
+.btn-sm {
+  @apply h-8 px-3 text-xs;
+}
+
+.input {
+  @apply flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-secondary/50 placeholder:text-muted-foreground focus-visible:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.card {
+  @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+}
+
+.card-hover {
+  @apply hover:shadow-md transition-shadow;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+}
+
+.status-registration {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-active {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-ended {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-completed {
+  @apply bg-purple-100 text-purple-800;
+}
+
+.status-cancelled {
+  @apply bg-red-100 text-red-800;
+}
+
+/* Animation classes */
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Keyframe animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Loading spinner */
+.loading-spinner {
+  @apply inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+}
+
+@media (min-width: 641px) {
+  .container {
+    @apply px-6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    @apply px-8;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--color-muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--color-muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+/* Focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
+}
+
+/* Toast styles */
+.toast {
+  @apply fixed bottom-4 right-4 z-50 max-w-sm w-full bg-background border border-border shadow-lg rounded-lg p-4;
+}
+
+.toast-success {
+  @apply border-success text-success-foreground;
+}
+
+.toast-error {
+  @apply border-error text-error-foreground;
+}
+
+.toast-warning {
+  @apply border-warning text-warning-foreground;
+}
+
+.toast-info {
+  @apply border-primary text-primary-foreground;
+}
+
+/* Wallet connection styles */
+.wallet-connected {
+  @apply text-success-600 bg-success-50;
+}
+
+.wallet-disconnected {
+  @apply text-secondary-600 bg-secondary-100;
+}
+
+/* Tournament card styles */
+.tournament-card {
+  @apply bg-white rounded-xl shadow-sm border border-secondary-200 p-6 transition-all duration-300;
+}
+
+.tournament-card:hover {
+  @apply hover:border-primary-400 hover:shadow-lg;
+}
+
+/* Form validation */
+.form-error {
+  @apply border-error text-error-foreground;
+}
+
+.form-success {
+  @apply border-success text-success-foreground;
+}
+
+/* Utility classes */
+.text-gradient {
+  @apply bg-gradient-to-r from-primary to-primary/600 bg-clip-text text-transparent;
+}
+
+.bg-gradient {
+  @apply bg-gradient-to-r from-primary to-primary/600;
+}
+
+/* Glass effect */
+.glass {
+  @apply bg-white/10 backdrop-blur-sm border border-white/20;
+}
+
+/* Shimmer effect */
+.shimmer {
+  @apply bg-gradient-to-r from-transparent via-white/20 to-transparent bg-[length:200%_100%] animate-shimmer;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

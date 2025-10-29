@@ -7,7 +7,7 @@ pub mod errors;
 use instructions::*;
 use state::*;
 
-declare_id!("11111111111111111111111111111111");
+declare_id!("BCp2s2ogskLUShw7Xvvkvbz2YWp9m94RPWJQCyXptyuv");
 
 #[program]
 pub mod tournament {

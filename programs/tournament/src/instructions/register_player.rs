@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+use anchor_lang::system_program::{transfer, Transfer};
 
 use crate::state::*;
 use crate::errors::*;
@@ -26,27 +26,18 @@ pub struct RegisterPlayer<'info> {
     )]
     pub player_entry: Account<'info, PlayerEntry>,
 
-    /// Player's USDC token account
-    #[account(
-        mut,
-        constraint = player_token_account.mint == vault_token_account.mint,
-        constraint = player_token_account.owner == player.key(),
-    )]
-    pub player_token_account: Account<'info, TokenAccount>,
-
-    /// Tournament vault token account
+    /// CHECK: Tournament vault account (PDA, seeds validated)
     #[account(
         mut,
         seeds = [b"vault-token", tournament.key().as_ref()],
         bump,
     )]
-    pub vault_token_account: Account<'info, TokenAccount>,
+    pub vault_account: AccountInfo<'info>,
 
     #[account(mut)]
     pub player: Signer<'info>,
 
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, Token>,
 }
 
 pub fn handler(ctx: Context<RegisterPlayer>) -> Result<()> {
@@ -60,15 +51,14 @@ pub fn handler(ctx: Context<RegisterPlayer>) -> Result<()> {
         TournamentError::TournamentAlreadyStarted
     );
 
-    // Transfer entry fee from player to vault
+    // Transfer entry fee (SOL) from player to vault
     let cpi_accounts = Transfer {
-        from: ctx.accounts.player_token_account.to_account_info(),
-        to: ctx.accounts.vault_token_account.to_account_info(),
-        authority: ctx.accounts.player.to_account_info(),
+        from: ctx.accounts.player.to_account_info(),
+        to: ctx.accounts.vault_account.to_account_info(),
     };
-    let cpi_program = ctx.accounts.token_program.to_account_info();
+    let cpi_program = ctx.accounts.system_program.to_account_info();
     let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
-    token::transfer(cpi_ctx, tournament.entry_fee)?;
+    transfer(cpi_ctx, tournament.entry_fee)?;
 
     // Update tournament state
     tournament.prize_pool = tournament.prize_pool

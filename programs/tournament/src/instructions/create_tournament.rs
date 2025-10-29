@@ -24,6 +24,16 @@ pub struct CreateTournament<'info> {
     )]
     pub vault_authority: Account<'info, VaultAuthority>,
 
+    /// CHECK: Vault account for holding SOL (PDA, seeds validated)
+    #[account(
+        init,
+        payer = admin,
+        space = 0,
+        seeds = [b"vault-token", tournament.key().as_ref()],
+        bump
+    )]
+    pub vault_account: AccountInfo<'info>,
+
     #[account(mut)]
     pub admin: Signer<'info>,
 

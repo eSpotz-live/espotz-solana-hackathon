@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Token, TokenAccount, Transfer};
+use anchor_lang::system_program::{transfer, Transfer};
 
 use crate::state::*;
 use crate::errors::*;
@@ -19,17 +19,17 @@ pub struct DistributePrizes<'info> {
     )]
     pub vault_authority: Account<'info, VaultAuthority>,
 
-    /// Tournament vault token account
+    /// CHECK: Tournament vault account (PDA, seeds validated)
     #[account(
         mut,
         seeds = [b"vault-token", tournament.key().as_ref()],
         bump,
     )]
-    pub vault_token_account: Account<'info, TokenAccount>,
+    pub vault_account: AccountInfo<'info>,
 
     pub admin: Signer<'info>,
-    pub token_program: Program<'info, Token>,
-    // Winner token accounts passed as remaining_accounts
+    pub system_program: Program<'info, System>,
+    // Winner accounts passed as remaining_accounts
 }
 
 pub fn handler<'info>(
@@ -62,39 +62,29 @@ pub fn handler<'info>(
     let signer_seeds = &[&seeds[..]];
 
     // Distribute prizes to each winner
-    // Winners' token accounts should be passed as remaining_accounts
+    // Winners should be passed as remaining_accounts
     for (i, (winner, amount)) in winners.iter().zip(amounts.iter()).enumerate() {
         if *amount == 0 {
             continue;
         }
 
-        // Get winner's token account from remaining_accounts
-        let winner_token_account = &ctx.remaining_accounts[i];
+        // Get winner account from remaining_accounts
+        let winner_account = &ctx.remaining_accounts[i];
 
-        // Verify it's the correct token account
-        let winner_token_account_data = TokenAccount::try_deserialize(
-            &mut &winner_token_account.data.borrow()[..]
-        )?;
-
+        // Verify the account matches the winner pubkey
         require!(
-            winner_token_account_data.owner == *winner,
+            winner_account.key() == *winner,
             TournamentError::Unauthorized
-        );
-
-        require!(
-            winner_token_account_data.mint == ctx.accounts.vault_token_account.mint,
-            TournamentError::InvalidMint
         );
 
         // Transfer from vault to winner
         let cpi_accounts = Transfer {
-            from: ctx.accounts.vault_token_account.to_account_info(),
-            to: winner_token_account.to_account_info(),
-            authority: ctx.accounts.vault_authority.to_account_info(),
+            from: ctx.accounts.vault_account.to_account_info(),
+            to: winner_account.to_account_info(),
         };
-        let cpi_program = ctx.accounts.token_program.to_account_info();
+        let cpi_program = ctx.accounts.system_program.to_account_info();
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
-        token::transfer(cpi_ctx, *amount)?;
+        transfer(cpi_ctx, *amount)?;
     }
 
     // Update tournament status
