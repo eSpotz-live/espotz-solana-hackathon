@@ -1,4 +1,5 @@
 import { PublicKey } from '@solana/web3.js';
+import { Buffer } from 'buffer';
 
 // Program ID on Solana Devnet
 export const PROGRAM_ID = new PublicKey('BCp2s2ogskLUShw7Xvvkvbz2YWp9m94RPWJQCyXptyuv');
@@ -17,17 +18,23 @@ export const DISCRIMINATORS = {
 
 // Game types
 export const GAME_TYPES = {
-  Chess: 0,
-  Checkers: 1,
-  Go: 2,
+  'League of Legends': 0,
+  'Call of Duty Mobile': 1,
+  'PUBG Mobile': 2,
+  'Free Fire': 3,
+  'Fortnite': 4,
+  'Valorant': 5,
+  'CS:GO': 6,
+  'Dota 2': 7,
 };
 
-// Tournament status
+// Tournament status (must match Rust enum)
 export const TOURNAMENT_STATUS = {
-  Open: 'Open',
+  Registration: 'Registration',
   Active: 'Active',
   Ended: 'Ended',
   Completed: 'Completed',
+  Cancelled: 'Cancelled',
 };
 
 // Solana Explorer base URL
