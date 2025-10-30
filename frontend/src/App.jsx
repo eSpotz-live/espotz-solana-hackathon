@@ -11,9 +11,9 @@ const connection = new Connection(RPC_ENDPOINT, 'confirmed');
 // Map game types to images
 const GAME_IMAGES = {
   0: '/LOL.png', // League of Legends
-  1: null, // Call of Duty Mobile (no image)
-  2: null, // PUBG Mobile (no image)
-  3: null, // Free Fire (no image)
+  1: '/COD2.png', // Call of Duty Mobile
+  2: '/pubg.png', // PUBG Mobile
+  3: '/FF.png', // Free Fire
   4: '/fortnite.png', // Fortnite
   5: '/valo2.png', // Valorant
   6: '/CS.png', // CS:GO
@@ -38,6 +38,10 @@ function App() {
   const [txStatus, setTxStatus] = useState(null);
   const [error, setError] = useState(null);
 
+  // Filter and Search State
+  const [activeFilter, setActiveFilter] = useState('All'); // All, Upcoming, Live, Completed
+  const [searchQuery, setSearchQuery] = useState('');
+
   // Create Tournament Form State
   const [tournamentId, setTournamentId] = useState('');
   const [gameType, setGameType] = useState(0);
@@ -57,6 +61,43 @@ function App() {
   // Generate random tournament ID
   const generateTournamentId = () => {
     setTournamentId(Math.floor(Math.random() * 1000000).toString());
+  };
+
+  // Clear all tournaments from localStorage
+  const clearAllTournaments = () => {
+    if (confirm('Are you sure you want to clear all tournaments? This will remove them from the UI but not from the blockchain.')) {
+      setTournaments([]);
+      localStorage.removeItem('espotz_tournaments');
+      setTxStatus({ type: 'success', message: 'All tournaments cleared from local storage' });
+    }
+  };
+
+  // Filter tournaments based on status and search query
+  const getFilteredTournaments = () => {
+    let filtered = tournaments;
+
+    // Apply status filter
+    if (activeFilter === 'Upcoming') {
+      filtered = filtered.filter(t => t.status === TOURNAMENT_STATUS.Registration);
+    } else if (activeFilter === 'Live') {
+      filtered = filtered.filter(t => t.status === TOURNAMENT_STATUS.Active);
+    } else if (activeFilter === 'Completed') {
+      filtered = filtered.filter(t => t.status === TOURNAMENT_STATUS.Completed);
+    }
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(t => {
+        const gameName = Object.keys(GAME_TYPES).find(key => GAME_TYPES[key] === t.gameType)?.toLowerCase() || '';
+        return (
+          gameName.includes(query) ||
+          t.id.toString().includes(query)
+        );
+      });
+    }
+
+    return filtered;
   };
 
   // Handle create tournament
@@ -424,15 +465,70 @@ function App() {
 
         {/* Tournaments List */}
         <div>
-          <h2 className="text-2xl font-bold text-white mb-4">Active Tournaments</h2>
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-3xl font-bold text-white">All Tournaments</h2>
+              {tournaments.length > 0 && (
+                <button
+                  onClick={clearAllTournaments}
+                  className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Clear All
+                </button>
+              )}
+            </div>
+            <p className="text-gray-400 text-sm mb-4">{getFilteredTournaments().length} tournaments found</p>
 
-          {tournaments.length === 0 ? (
-            <div className="p-8 bg-white bg-opacity-10 backdrop-blur-md rounded-xl border border-white border-opacity-20 text-center">
-              <p className="text-white text-lg">No tournaments yet. Create one above!</p>
+            {/* Filter Buttons */}
+            <div className="flex flex-wrap gap-3 mb-4">
+              {['All', 'Upcoming', 'Live', 'Completed'].map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setActiveFilter(filter)}
+                  className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+                    activeFilter === filter
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+
+            {/* Search Bar */}
+            <div className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search tournaments..."
+                className="w-full px-4 py-3 pl-12 rounded-lg bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:border-purple-500 focus:outline-none"
+              />
+              <svg
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+
+          {getFilteredTournaments().length === 0 ? (
+            <div className="p-12 text-center">
+              <div className="flex justify-center mb-4">
+                <svg className="w-16 h-16 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              </div>
+              <p className="text-white text-xl font-semibold mb-2">No tournaments found</p>
+              <p className="text-gray-400">Try adjusting your filters or search terms</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {tournaments.map((tournament) => {
+              {getFilteredTournaments().map((tournament) => {
                 const gameName = Object.keys(GAME_TYPES).find(key => GAME_TYPES[key] === tournament.gameType);
                 const gameImage = GAME_IMAGES[tournament.gameType];
 

@@ -60,14 +60,52 @@ export async function createTournament(wallet, tournamentId, gameType, entryFee,
   const tx = new Transaction().add(ix);
   tx.feePayer = wallet.publicKey;
 
-  const txSig = await wallet.sendTransaction(tx, connection);
-  await connection.confirmTransaction(txSig, 'confirmed');
+  // Get recent blockhash
+  const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('confirmed');
+  tx.recentBlockhash = blockhash;
 
-  return { txSig, tournamentPda };
+  try {
+    const txSig = await wallet.sendTransaction(tx, connection, {
+      skipPreflight: false,
+      preflightCommitment: 'confirmed',
+      maxRetries: 3
+    });
+    console.log('Transaction sent:', txSig);
+
+    const confirmation = await connection.confirmTransaction(txSig, 'confirmed');
+    console.log('Transaction confirmed:', confirmation);
+
+    return { txSig, tournamentPda };
+  } catch (error) {
+    console.error('Create tournament error details:', error);
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    if (error.logs) {
+      console.error('Program logs:', error.logs);
+      // Try to extract meaningful error from logs
+      const errorLog = error.logs?.find(log => log.includes('Error:') || log.includes('failed'));
+      if (errorLog) console.error('Error from logs:', errorLog);
+    }
+    throw new Error(`Failed to create tournament: ${error.message}`);
+  }
 }
 
 // Register Player
 export async function registerPlayer(wallet, tournamentPda) {
+  // Check if tournament account exists
+  try {
+    const tournamentInfo = await connection.getAccountInfo(tournamentPda);
+    if (!tournamentInfo) {
+      throw new Error('Tournament account does not exist on-chain. It may have been created in a previous session. Please create a new tournament.');
+    }
+    console.log('Tournament account found, size:', tournamentInfo.data.length);
+  } catch (error) {
+    if (error.message.includes('does not exist')) {
+      throw error;
+    }
+    console.error('Error checking tournament account:', error);
+  }
+
   const playerEntryPda = derivePlayerEntryPda(tournamentPda, wallet.publicKey);
   const vaultAccountPda = deriveVaultAccountPda(tournamentPda);
 
@@ -88,13 +126,69 @@ export async function registerPlayer(wallet, tournamentPda) {
   const tx = new Transaction().add(ix);
   tx.feePayer = wallet.publicKey;
 
+  // Get recent blockhash
+  const { blockhash } = await connection.getLatestBlockhash('confirmed');
+  tx.recentBlockhash = blockhash;
+
+  // Try to simulate the transaction first to get detailed error info
   try {
-    const txSig = await wallet.sendTransaction(tx, connection);
-    await connection.confirmTransaction(txSig, 'confirmed');
+    console.log('Simulating transaction...');
+    console.log('Tournament PDA:', tournamentPda.toString());
+    console.log('Player Entry PDA:', playerEntryPda.toString());
+    console.log('Vault Account PDA:', vaultAccountPda.toString());
+    console.log('Player Wallet:', wallet.publicKey.toString());
+
+    const simulation = await connection.simulateTransaction(tx);
+    console.log('Simulation result:', simulation);
+
+    if (simulation.value.err) {
+      console.error('Simulation failed:', simulation.value.err);
+      console.error('Simulation logs:', simulation.value.logs);
+      throw new Error(`Transaction simulation failed: ${JSON.stringify(simulation.value.err)}`);
+    }
+  } catch (simError) {
+    console.error('Simulation error:', simError);
+    if (simError.message.includes('simulation failed')) {
+      throw simError;
+    }
+    // If simulation itself fails (not the transaction), continue to try sending
+    console.warn('Could not simulate, trying to send anyway...');
+  }
+
+  try {
+    const txSig = await wallet.sendTransaction(tx, connection, {
+      skipPreflight: false,
+      preflightCommitment: 'confirmed',
+      maxRetries: 3
+    });
+    console.log('Transaction sent:', txSig);
+
+    const confirmation = await connection.confirmTransaction(txSig, 'confirmed');
+    console.log('Transaction confirmed:', confirmation);
+
     return txSig;
   } catch (error) {
     console.error('Register player error details:', error);
-    if (error.logs) console.error('Program logs:', error.logs);
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    if (error.logs) {
+      console.error('Program logs:', error.logs);
+      // Try to extract meaningful error from logs
+      const errorLog = error.logs?.find(log => log.includes('Error:') || log.includes('failed') || log.includes('custom program error'));
+      if (errorLog) console.error('Error from logs:', errorLog);
+    }
+
+    // Try to get transaction error details
+    if (error.signature) {
+      try {
+        const txDetails = await connection.getTransaction(error.signature, {
+          maxSupportedTransactionVersion: 0
+        });
+        console.error('Transaction details:', txDetails);
+      } catch (e) {
+        console.error('Could not fetch transaction details:', e);
+      }
+    }
 
     // Check for specific error messages
     if (error.message.includes('insufficient funds') || error.message.includes('InsufficientFunds')) {
@@ -123,6 +217,10 @@ export async function startTournament(wallet, tournamentPda) {
 
   const tx = new Transaction().add(ix);
   tx.feePayer = wallet.publicKey;
+
+  // Get recent blockhash
+  const { blockhash } = await connection.getLatestBlockhash('confirmed');
+  tx.recentBlockhash = blockhash;
 
   try {
     const txSig = await wallet.sendTransaction(tx, connection);
@@ -167,6 +265,10 @@ export async function submitResults(wallet, tournamentPda, winners) {
 
   const tx = new Transaction().add(ix);
   tx.feePayer = wallet.publicKey;
+
+  // Get recent blockhash
+  const { blockhash } = await connection.getLatestBlockhash('confirmed');
+  tx.recentBlockhash = blockhash;
 
   try {
     const txSig = await wallet.sendTransaction(tx, connection);
@@ -245,6 +347,11 @@ export async function distributePrizes(wallet, tournamentPda, winners, amounts) 
   });
 
   const tx = new Transaction().add(ix);
+  tx.feePayer = wallet.publicKey;
+
+  // Get recent blockhash
+  const { blockhash } = await connection.getLatestBlockhash('confirmed');
+  tx.recentBlockhash = blockhash;
 
   try {
     const txSig = await wallet.sendTransaction(tx, connection);
@@ -252,6 +359,7 @@ export async function distributePrizes(wallet, tournamentPda, winners, amounts) 
     return txSig;
   } catch (error) {
     console.error('Prize distribution error:', error);
+    if (error.logs) console.error('Program logs:', error.logs);
     throw new Error('Prize distribution is currently blocked by a smart contract issue. The vault funds are secure and will be distributed once the contract is fixed.');
   }
 }
