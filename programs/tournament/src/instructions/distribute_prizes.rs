@@ -1,10 +1,10 @@
 use anchor_lang::prelude::*;
-use anchor_lang::system_program::{transfer, Transfer};
 
 use crate::state::*;
 use crate::errors::*;
 
 #[derive(Accounts)]
+#[instruction(winners: Vec<Pubkey>, amounts: Vec<u64>)]
 pub struct DistributePrizes<'info> {
     #[account(
         mut,
@@ -52,15 +52,6 @@ pub fn handler<'info>(
         TournamentError::InsufficientPrizePool
     );
 
-    // Prepare PDA signer seeds
-    let tournament_key = tournament.key();
-    let seeds = &[
-        b"vault-authority",
-        tournament_key.as_ref(),
-        &[ctx.accounts.vault_authority.bump],
-    ];
-    let signer_seeds = &[&seeds[..]];
-
     // Distribute prizes to each winner
     // Winners should be passed as remaining_accounts
     for (i, (winner, amount)) in winners.iter().zip(amounts.iter()).enumerate() {
@@ -77,14 +68,9 @@ pub fn handler<'info>(
             TournamentError::Unauthorized
         );
 
-        // Transfer from vault to winner
-        let cpi_accounts = Transfer {
-            from: ctx.accounts.vault_account.to_account_info(),
-            to: winner_account.to_account_info(),
-        };
-        let cpi_program = ctx.accounts.system_program.to_account_info();
-        let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
-        transfer(cpi_ctx, *amount)?;
+        // Transfer lamports directly (vault is System Program owned)
+        **ctx.accounts.vault_account.try_borrow_mut_lamports()? -= *amount;
+        **winner_account.try_borrow_mut_lamports()? += *amount;
     }
 
     // Update tournament status

@@ -353,13 +353,65 @@ export async function distributePrizes(wallet, tournamentPda, winners, amounts) 
   const { blockhash } = await connection.getLatestBlockhash('confirmed');
   tx.recentBlockhash = blockhash;
 
+  // Simulate transaction first to get detailed error
   try {
-    const txSig = await wallet.sendTransaction(tx, connection);
-    await connection.confirmTransaction(txSig, 'confirmed');
+    console.log('🧪 Simulating distribute prizes transaction...');
+    const simulation = await connection.simulateTransaction(tx);
+
+    if (simulation.value.err) {
+      console.error('❌ Simulation failed:', simulation.value.err);
+      if (simulation.value.logs) {
+        console.error('📝 Program logs:');
+        simulation.value.logs.forEach(log => console.error('  ', log));
+      }
+      throw new Error(`Transaction simulation failed: ${JSON.stringify(simulation.value.err)}`);
+    }
+
+    console.log('✅ Simulation passed');
+    if (simulation.value.logs) {
+      console.log('📝 Simulation logs:');
+      simulation.value.logs.forEach(log => console.log('  ', log));
+    }
+  } catch (simError) {
+    console.error('Simulation error:', simError);
+    throw simError;
+  }
+
+  try {
+    const txSig = await wallet.sendTransaction(tx, connection, {
+      skipPreflight: false,
+      preflightCommitment: 'confirmed',
+    });
+    console.log('Transaction sent:', txSig);
+
+    const confirmation = await connection.confirmTransaction(txSig, 'confirmed');
+    console.log('Confirmation:', confirmation);
+
+    if (confirmation.value.err) {
+      throw new Error(`Transaction failed: ${JSON.stringify(confirmation.value.err)}`);
+    }
+
     return txSig;
   } catch (error) {
     console.error('Prize distribution error:', error);
-    if (error.logs) console.error('Program logs:', error.logs);
-    throw new Error('Prize distribution is currently blocked by a smart contract issue. The vault funds are secure and will be distributed once the contract is fixed.');
+    console.error('Error details:', JSON.stringify(error, null, 2));
+
+    // Try to get transaction logs if available
+    if (error.signature || error.transactionSignature) {
+      const sig = error.signature || error.transactionSignature;
+      try {
+        const txDetails = await connection.getTransaction(sig, {
+          commitment: 'confirmed',
+          maxSupportedTransactionVersion: 0,
+        });
+        if (txDetails?.meta?.logMessages) {
+          console.error('Transaction logs:', txDetails.meta.logMessages);
+        }
+      } catch (logError) {
+        console.error('Could not fetch transaction logs:', logError);
+      }
+    }
+
+    throw error;
   }
 }

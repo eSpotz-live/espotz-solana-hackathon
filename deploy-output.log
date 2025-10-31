@@ -1,0 +1,17 @@
+Deploying cluster: https://api.devnet.solana.com
+Upgrade authority: /home/user/.config/solana/id.json
+Deploying program "tournament"...
+Program path: /home/user/Desktop/claude/espotz-solana/target/deploy/tournament.so...
+Program Id: BCp2s2ogskLUShw7Xvvkvbz2YWp9m94RPWJQCyXptyuv
+
+Signature: 3nxbmJ3DQopwqcvs9YWB8iyMciWTiu3NkTgyDDwN2a1M1LV65XTa1u79ViB2jHDUMs4aGGJjEJatpd583dAyjppR
+
+Waiting for program BCp2s2ogskLUShw7Xvvkvbz2YWp9m94RPWJQCyXptyuv to be confirmed...
+Program confirmed on-chain
+Idl data length: 2132 bytes
+Step 0/2132 
+Step 600/2132 
+Step 1200/2132 
+Step 1800/2132 
+Idl account 7FaTNig42jk7L7v9fYvmQj6avXeVBGQbJxythDnPjA5F successfully upgraded
+Deploy success
