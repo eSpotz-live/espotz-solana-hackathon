@@ -1,0 +1,11 @@
+/home/user/Desktop/claude/espotz-solana/target/debug/deps/generic_array-2ac6893a5d7b37df.d: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/hex.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/impls.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/arr.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/functional.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/iter.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/sequence.rs
+
+/home/user/Desktop/claude/espotz-solana/target/debug/deps/libgeneric_array-2ac6893a5d7b37df.rmeta: /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/lib.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/hex.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/impls.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/arr.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/functional.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/iter.rs /home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/sequence.rs
+
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/lib.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/hex.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/impls.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/arr.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/functional.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/iter.rs:
+/home/user/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/src/sequence.rs:

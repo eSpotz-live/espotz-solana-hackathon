@@ -8,9 +8,11 @@ skip-lint = false
 
 [programs.localnet]
 tournament = "BCp2s2ogskLUShw7Xvvkvbz2YWp9m94RPWJQCyXptyuv"
+prediction_market = "MD63kQkcMMZdw2fCBMNxH3WDj7n1nbb1x1irTMwEUBP"
 
 [programs.devnet]
 tournament = "BCp2s2ogskLUShw7Xvvkvbz2YWp9m94RPWJQCyXptyuv"
+prediction_market = "MD63kQkcMMZdw2fCBMNxH3WDj7n1nbb1x1irTMwEUBP"
 
 [registry]
 url = "https://api.apr.dev"
