@@ -17,3 +17,6 @@ target/
 # Environment files
 .env
 .env.*
+
+
+chroma-mcp/
