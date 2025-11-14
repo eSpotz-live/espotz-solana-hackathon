@@ -87,6 +87,20 @@ pub mod tournament {
 
         Ok(())
     }
+
+    /// Initialize Switchboard oracle for tournament
+    pub fn initialize_oracle(ctx: Context<InitializeOracle>) -> Result<()> {
+        instructions::initialize_oracle::handler(ctx)
+    }
+
+    /// Distribute prizes with Switchboard oracle verification
+    pub fn distribute_prizes_oracle<'info>(
+        ctx: Context<'_, '_, '_, 'info, DistributePrizesOracle<'info>>,
+        winners: Vec<Pubkey>,
+        amounts: Vec<u64>,
+    ) -> Result<()> {
+        instructions::distribute_prizes_oracle::handler(ctx, winners, amounts)
+    }
 }
 
 #[derive(Accounts)]

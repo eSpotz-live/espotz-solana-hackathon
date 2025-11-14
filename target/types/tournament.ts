@@ -411,6 +411,233 @@ export type Tournament = {
       ]
     },
     {
+      "name": "distributePrizesOracle",
+      "docs": [
+        "Distribute prizes with Switchboard oracle verification"
+      ],
+      "discriminator": [
+        46,
+        38,
+        87,
+        3,
+        200,
+        88,
+        21,
+        121
+      ],
+      "accounts": [
+        {
+          "name": "tournament",
+          "writable": true
+        },
+        {
+          "name": "tournamentOracle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  45,
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "oracleAuthority",
+          "docs": [
+            "Oracle authority (Ed25519 public key for signature verification)"
+          ]
+        },
+        {
+          "name": "instructionSysvar",
+          "docs": [
+            "Sysvar Instructions account for Ed25519 signature verification"
+          ],
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "vaultAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vaultAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  45,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "winners",
+          "type": {
+            "vec": "pubkey"
+          }
+        },
+        {
+          "name": "amounts",
+          "type": {
+            "vec": "u64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "initializeOracle",
+      "docs": [
+        "Initialize Switchboard oracle for tournament"
+      ],
+      "discriminator": [
+        144,
+        223,
+        131,
+        120,
+        196,
+        253,
+        181,
+        99
+      ],
+      "accounts": [
+        {
+          "name": "tournament"
+        },
+        {
+          "name": "tournamentOracle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  111,
+                  117,
+                  114,
+                  110,
+                  97,
+                  109,
+                  101,
+                  110,
+                  116,
+                  45,
+                  111,
+                  114,
+                  97,
+                  99,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "tournament"
+              }
+            ]
+          }
+        },
+        {
+          "name": "oracleFeed",
+          "docs": [
+            "Switchboard pull feed account"
+          ]
+        },
+        {
+          "name": "oracleQueue",
+          "docs": [
+            "Switchboard oracle queue account"
+          ]
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "registerPlayer",
       "docs": [
         "Register a player for a tournament"
@@ -593,6 +820,19 @@ export type Tournament = {
       ]
     },
     {
+      "name": "tournamentOracle",
+      "discriminator": [
+        196,
+        191,
+        124,
+        79,
+        80,
+        26,
+        60,
+        245
+      ]
+    },
+    {
       "name": "vaultAuthority",
       "discriminator": [
         132,
@@ -607,6 +847,19 @@ export type Tournament = {
     }
   ],
   "events": [
+    {
+      "name": "oracleInitialized",
+      "discriminator": [
+        42,
+        87,
+        109,
+        208,
+        1,
+        105,
+        101,
+        142
+      ]
+    },
     {
       "name": "playerRegistered",
       "discriminator": [
@@ -631,6 +884,19 @@ export type Tournament = {
         223,
         21,
         83
+      ]
+    },
+    {
+      "name": "prizesDistributedWithOracle",
+      "discriminator": [
+        202,
+        67,
+        56,
+        255,
+        167,
+        64,
+        182,
+        166
       ]
     },
     {
@@ -794,6 +1060,31 @@ export type Tournament = {
       "code": 6018,
       "name": "playerNotRegistered",
       "msg": "Player is not registered for this tournament"
+    },
+    {
+      "code": 6019,
+      "name": "oracleNotInitialized",
+      "msg": "Oracle not initialized for this tournament"
+    },
+    {
+      "code": 6020,
+      "name": "invalidOracle",
+      "msg": "Invalid oracle feed account"
+    },
+    {
+      "code": 6021,
+      "name": "invalidOracleData",
+      "msg": "Invalid oracle data format"
+    },
+    {
+      "code": 6022,
+      "name": "staleOracleData",
+      "msg": "Oracle data is stale"
+    },
+    {
+      "code": 6023,
+      "name": "oracleVerificationFailed",
+      "msg": "Oracle verification failed"
     }
   ],
   "types": [
@@ -822,6 +1113,26 @@ export type Tournament = {
           },
           {
             "name": "other"
+          }
+        ]
+      }
+    },
+    {
+      "name": "oracleInitialized",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "oracleFeed",
+            "type": "pubkey"
+          },
+          {
+            "name": "oracleQueue",
+            "type": "pubkey"
           }
         ]
       }
@@ -917,6 +1228,42 @@ export type Tournament = {
           {
             "name": "total",
             "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "prizesDistributedWithOracle",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "type": "pubkey"
+          },
+          {
+            "name": "winners",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "amounts",
+            "type": {
+              "vec": "u64"
+            }
+          },
+          {
+            "name": "total",
+            "type": "u64"
+          },
+          {
+            "name": "oracleVerified",
+            "type": "bool"
+          },
+          {
+            "name": "verificationTimestamp",
+            "type": "i64"
           }
         ]
       }
@@ -1116,6 +1463,68 @@ export type Tournament = {
           {
             "name": "endTime",
             "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "tournamentOracle",
+      "docs": [
+        "Oracle feed account for tournament results verification",
+        "This account stores the Switchboard oracle feed pubkey for a tournament"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tournament",
+            "docs": [
+              "The tournament this oracle is associated with"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "oracleFeed",
+            "docs": [
+              "Switchboard pull feed pubkey"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "oracleQueue",
+            "docs": [
+              "Oracle queue pubkey"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "isInitialized",
+            "docs": [
+              "Whether the oracle has been initialized"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "lastVerificationTimestamp",
+            "docs": [
+              "Last verified result timestamp"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "verifiedWinner",
+            "docs": [
+              "Winner verified by oracle (for single winner tournaments)",
+              "For multi-winner, we'll use events and off-chain data"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
           }
         ]
       }

@@ -1,0 +1,21 @@
+{
+  "name": "tournament-oracle-publisher",
+  "version": "1.0.0",
+  "description": "Off-chain oracle publisher for Espotz tournament results",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "publish": "node src/publish-result.js"
+  },
+  "keywords": ["solana", "oracle", "tournament", "switchboard"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@solana/web3.js": "^1.95.0",
+    "@coral-xyz/anchor": "^0.30.1",
+    "tweetnacl": "^1.0.3",
+    "bs58": "^5.0.0",
+    "dotenv": "^16.4.5"
+  }
+}

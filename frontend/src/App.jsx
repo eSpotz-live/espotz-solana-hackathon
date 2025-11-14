@@ -5,6 +5,7 @@ import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { GAME_TYPES, TOURNAMENT_STATUS, RPC_ENDPOINT, EXPLORER_URL } from './utils/constants';
 import { deriveTournamentPda } from './utils/pdas';
 import { createTournament, registerPlayer, startTournament, submitResults, distributePrizes } from './utils/tournament';
+import { initializeOracle, checkOracleInitialized, getOracleAccountData } from './utils/oracle';
 
 const connection = new Connection(RPC_ENDPOINT, 'confirmed');
 
@@ -52,6 +53,9 @@ function App() {
 
   // Results submission state - map tournament ID to winner address
   const [winnerAddresses, setWinnerAddresses] = useState({});
+
+  // Oracle status state - map tournament ID to oracle status
+  const [oracleStatus, setOracleStatus] = useState({});
 
   // Save tournaments to localStorage whenever they change
   useEffect(() => {
@@ -324,6 +328,54 @@ function App() {
     }
   };
 
+  // Handle initialize oracle
+  const handleInitializeOracle = async (tournament) => {
+    if (!wallet.connected) {
+      setError('Please connect your wallet');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setTxStatus(null);
+
+    try {
+      const tournamentPda = new PublicKey(tournament.pda);
+      const { txSig, tournamentOraclePda } = await initializeOracle(wallet, tournamentPda);
+
+      setTxStatus({
+        type: 'success',
+        message: 'Oracle initialized successfully!',
+        txSig,
+      });
+
+      // Update oracle status for this tournament
+      setOracleStatus(prev => ({
+        ...prev,
+        [tournament.id]: { initialized: true, pda: tournamentOraclePda.toString() }
+      }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Check oracle status for a tournament
+  const checkTournamentOracle = async (tournament) => {
+    try {
+      const tournamentPda = new PublicKey(tournament.pda);
+      const status = await checkOracleInitialized(tournamentPda);
+
+      setOracleStatus(prev => ({
+        ...prev,
+        [tournament.id]: status
+      }));
+    } catch (err) {
+      console.error('Error checking oracle status:', err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black">
       {/* Navigation Header */}
@@ -592,6 +644,37 @@ function App() {
                     <p><span className="text-gray-400">Players:</span> {tournament.currentPlayers} / {tournament.maxPlayers}</p>
                     <p><span className="text-gray-400">Start:</span> {new Date(tournament.startTime * 1000).toLocaleString()}</p>
                     <p><span className="text-gray-400">End:</span> {new Date(tournament.endTime * 1000).toLocaleString()}</p>
+
+                    {/* Oracle Status */}
+                    <div className="pt-2 border-t border-gray-700">
+                      <p className="text-gray-400 mb-1">Oracle Status:</p>
+                      <div className="flex items-center gap-2">
+                        {oracleStatus[tournament.id]?.initialized ? (
+                          <span className="text-green-400 text-xs flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            Initialized
+                          </span>
+                        ) : (
+                          <span className="text-gray-500 text-xs flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                            Not Initialized
+                          </span>
+                        )}
+                        {!oracleStatus[tournament.id] && (
+                          <button
+                            onClick={() => checkTournamentOracle(tournament)}
+                            className="text-xs text-purple-400 hover:text-purple-300 underline"
+                          >
+                            Check
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
                     {tournament.participants && tournament.participants.length > 0 && (
                       <div>
                         <p className="text-gray-400 mb-1">Participants:</p>
@@ -616,13 +699,24 @@ function App() {
                           Register
                         </button>
                         {wallet.publicKey && tournament.admin === wallet.publicKey.toString() && (
-                          <button
-                            onClick={() => handleStart(tournament)}
-                            disabled={loading}
-                            className="w-full py-2.5 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 disabled:opacity-50 transition-colors"
-                          >
-                            Start Tournament
-                          </button>
+                          <>
+                            {!oracleStatus[tournament.id]?.initialized && (
+                              <button
+                                onClick={() => handleInitializeOracle(tournament)}
+                                disabled={loading}
+                                className="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                              >
+                                Initialize Oracle
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleStart(tournament)}
+                              disabled={loading}
+                              className="w-full py-2.5 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 disabled:opacity-50 transition-colors"
+                            >
+                              Start Tournament
+                            </button>
+                          </>
                         )}
                       </>
                     )}
@@ -661,13 +755,22 @@ function App() {
                     {tournament.status === TOURNAMENT_STATUS.Ended &&
                      wallet.publicKey &&
                      tournament.admin === wallet.publicKey.toString() && (
-                      <button
-                        onClick={() => handleDistributePrizes(tournament)}
-                        disabled={loading}
-                        className="w-full py-2.5 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:opacity-50 transition-colors"
-                      >
-                        Distribute Prizes
-                      </button>
+                      <div className="space-y-2">
+                        <button
+                          onClick={() => handleDistributePrizes(tournament)}
+                          disabled={loading}
+                          className="w-full py-2.5 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                        >
+                          Distribute Prizes (Manual)
+                        </button>
+                        {oracleStatus[tournament.id]?.initialized && (
+                          <div className="p-3 bg-indigo-500 bg-opacity-20 border border-indigo-400 rounded-lg">
+                            <p className="text-indigo-200 text-xs">
+                              <span className="font-semibold">Oracle Enabled:</span> Prize distribution with oracle verification must be done through the oracle publisher service.
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     )}
 
                     {tournament.status === TOURNAMENT_STATUS.Completed && (

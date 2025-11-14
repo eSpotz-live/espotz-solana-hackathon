@@ -58,4 +58,19 @@ pub enum TournamentError {
 
     #[msg("Player is not registered for this tournament")]
     PlayerNotRegistered,
+
+    #[msg("Oracle not initialized for this tournament")]
+    OracleNotInitialized,
+
+    #[msg("Invalid oracle feed account")]
+    InvalidOracle,
+
+    #[msg("Invalid oracle data format")]
+    InvalidOracleData,
+
+    #[msg("Oracle data is stale")]
+    StaleOracleData,
+
+    #[msg("Oracle verification failed")]
+    OracleVerificationFailed,
 }

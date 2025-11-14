@@ -1,13 +1,19 @@
-# Ignore all markdown files
+# Ignore all markdown and text files
 *.md
+*.txt
 
-# Except important documentation
+# Keep only the main README
 !README.md
-!DEPLOYMENT.md
-!ARCHITECTURE.md
-!PRIZE_DISTRIBUTION_FIX.md
-!PREDICTION_MARKETS.md
-!ORACLE_ARCHITECTURE.md
 
-# Chroma MCP directory
-chroma-mcp/
+# Node modules
+node_modules/
+
+# Build artifacts and Rust target directory
+target/
+
+# Log files
+*.log
+
+# Environment files
+.env
+.env.*

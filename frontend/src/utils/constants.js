@@ -14,6 +14,8 @@ export const DISCRIMINATORS = {
   startTournament: Buffer.from([164, 168, 208, 157, 43, 10, 220, 241]),
   submitResults: Buffer.from([22, 16, 250, 159, 91, 235, 19, 57]),
   distributePrizes: Buffer.from([154, 99, 201, 93, 82, 104, 73, 232]),
+  initializeOracle: Buffer.from([144, 223, 131, 120, 196, 253, 181, 99]),
+  distributePrizesOracle: Buffer.from([46, 38, 87, 3, 200, 88, 21, 121]),
 };
 
 // Game types

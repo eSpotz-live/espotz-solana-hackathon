@@ -39,3 +39,12 @@ export function derivePlayerEntryPda(tournamentPda, playerPubkey) {
 
   return pda;
 }
+
+export function deriveTournamentOraclePda(tournamentPda) {
+  const [pda] = PublicKey.findProgramAddressSync(
+    [Buffer.from('tournament-oracle'), tournamentPda.toBuffer()],
+    PROGRAM_ID
+  );
+
+  return pda;
+}
